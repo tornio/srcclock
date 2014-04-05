@@ -1,0 +1,4 @@
+PROJECT_NAME = SRCclock
+GENERATE_LATEX = YES
+OUTPUT_DIRECTORY = ./doc/
+INPUT = ./source/

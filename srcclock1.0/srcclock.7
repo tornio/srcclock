@@ -1,0 +1,119 @@
+.TH srcclock 7 "April 2014" "Vittorio Tornielli di Crestvolant" "Misc"
+.SH NAME
+srcclock \- decode, play and syncronise the system clock to the RAI-SRC time signal
+.SH SYNOPSIS
+.B srcclock [options]
+.SH DESCRIPTION
+.B srcclock
+The program decodes, plays and can syncronise the system clock with the RAI SRC time signal broadcasted during normal radio programs. The SRC signal is produced by the Istituto Nazionale di Ricerca Metrologica (INRIM) of Turin and broadcasted by RAI RAdiotelevisione Italiana about 20-30 times a day. The signal is formed by two segments of bit, S1 and S2, and a serie of sincronisation tones before the end of the minute. The bit segments S1 and S2 are transmitted at second 52 and 53 respectively. The program is able to syncronise the time based on the information carried on the SRC. For more information, check the page
+.I http://www.inrim.it/res/tf/src_i.shtml
+for all the details on the SRC signal or the link
+.I http://www.inrim.it/
+for general information of the Istituto Nazionale di Ricerca Metrologica.
+
+The program is also able to play and simulate the SRC with several features like additive white gaussian noise, random theta, etc... This program can read and write the sound sample data to external files. It is also possible to define the sample frequency and choose between mono/stereo sound streams.
+.SH OPTIONS
+.TP
+.B -d, --decode
+decode the SRC signal.
+.TP
+.B -y, --system-sync
+Syncronise the system clock to the SRC. Requires root privileges. The syncronisation of the system clock is done only if the signal has been successfully decoded and syncronised with its time reference.
+.TP
+.B -N, --snr=SNR_LEVEL
+SNR detection level over the noise in dB. Default is SNR_LEVEL=10 dB abose noise level. The noise level is calculated on the average of power associated to frequency F0 and F1 over the last samples (set by the window option).
+.TP
+.B -W, --window=LENGTH
+Window Decision System (WDS). Set the length of the window in time symbols. Default is LENGTH=50 symbols. This feature is capable to adapt the
+level of the decision threshold on the effective noise on the channel. The command set the number of symbols on which calculated the average noise level. If the value of the window is set to be 0 samples, than the decision threshold is not adjusted to the noise channel and a static
+threshold is used instead.
+.TP
+.B -D, --delay=DELAY
+Delay of syncronisation in microseconds. The syncronisation is aligned on the estimated delays during run time. However, the user can specify additional delays in microseconds in order to take into account the radio transmission and decoding dealys of the RF equipment.
+.TP
+.B -T, --timeout=TIMEOUT
+Set the timeout for decoding in seconds. The default value is 10 minutes.
+.TP
+.B -t, --threshold=TH
+Set static decision threshold in dB (default -35 dB). The static threshold is used when either when the number of read symbols is less than the size of the window of the WDS, or when the window is set to 0.
+.TP
+.B -p, --play
+Play SRC signal. The program is capable to reproduce the SRC for debugging and learning purposes. Without furhter options, the program creates the SRC signal associated to the current date and time with no warnings nor DST flag set.
+.TP
+.B -k, --rand-theta
+This option set a random phase to the SRC signal when it is played. This is used to simulate the phase uncertainty of a non-coherent receiver.
+.TP
+.B -o, --rand-samples
+Before to play the SRC, a random number of samples is played. This function is used to test the tuning function during the decoding process. By setting this option, the number of samples is random chosen between 1 and the sample frequency, thus the total duration is less than 1 second.
+.TP
+.B -a, --power=POWER
+Set the power level in dB of the signal SRC when playing. The accepted value are number below or equal to 0 dB, where 0 dB means the maximum possible level of the power of SRC provided by the sound system.
+.TP
+.B -n, --noise=SIGMA
+The SRC is played with a given noise expressed as the RMS. The noise is of the type AWGN (Additive Withe Gaussian Noise) with zero average and root mean square specified through the SIGMA parameter. The AWGN noise is applied both to the SRC signal and, eventually, to the preceeding random samples.
+.TP
+.B -S, --set-date=DATE
+The SRC is played setting a custom time and date. The DATE parameter must be set as a string in the format <hh:mm DD/MM/YYYY> where hh are the hours (0-23), mm are minutes (0-59), DD is the day of the month (1-31), MM is the month (1-12) and YYYY is the year. If the date and time specified are valid, the day of the week is automatically calculated.
+.TP
+.B -e, --dst-on
+Set the dst flag (OE) to 1.
+.TP
+.B -E, --dst-off
+Set the dst flag (OE) to 0 (default is set according to the system).
+.TP
+.B -C, --change-time=SE
+Set the SRC warning of change solar/legal time. The value specified in SE parameter is a number between 0 and 7, the latter means no warning.
+By default the SRC is played with no warnings, thus this parameter is usually set to 7. However, the user can specify the number of days
+prior to the time change by spicifiyng any number between 0 and 6.
+.TP
+.B -l, --leap-second=SI
+Introduce the warning of leapsecond at the end of the month in the SRC. It is possible to add or substract a second at the end of the month, thus the parameter SI is, either, +1 or -1. The default value is 0, meaning no warning.
+.TP
+.B -s, --sync
+This option force the program to syncronise the SRC with the 1kHz BP tones in decoding mode, while plays the BP tones in play mode. The settings of the WDS and noise are automatically applied when this option is selected.
+.TP
+.B -r, --rate=FREQ
+Set the sampling frequency rate. Default value is 8kHz.
+.TP
+.B -m, --mono
+The sound stream (input or output) is considered mono (1 channel)
+.TP
+.B -M, --stero
+The sound stream (input or output) is considered stereo (2 channels). This is the default setting.
+.TP
+.B -f, --file=FILE
+Select a file for input or output stream. The structure of the file is the standard little-endian raw floating point.
+.TP
+.B -c, --card=DEV
+Select the pulseaudio device.
+.TP
+.B -v, --debug=LEVEL
+Set the level of output messages. Default is 1.
+.TP
+.B -I, --iso
+The information of date and time is displayed with the standard ISO 8601 notation YYYY-MM-DDThh:mm:ss+HhMm. By default the program prints the date and time using the standard E-mail format as it is defined in RFC2822.
+.TP
+.B -b, --binary
+The binary string of the SRC is printed.
+.TP
+.B -R, --repeat=TIMES
+The program is forced to repaet the action of decoding/playing for TIMES number of times.
+.TP
+.B -L, --logfile=LOG
+Redirect the log messages to filename expressed with the LOG parameter. The eventual path should be included in the parameter.
+.TP
+.B -w, --warranty
+Print the warranty indication.
+.TP
+.B V, --version
+Print the version of the program
+.TP
+.B -h, --help
+Print a brief help with usage and options of the program.
+.SH NOTE
+The program assumes the SRC being received contains a date information no earlier than 1st of January 2000. The value of the field "AN" is in the range 0-99 indeed any date between 2000 and 2099 is accepted. If decoding a recording prior to 01/01/2000 it might fail the validity check.
+.SH AUTHOR
+Vittorio Tornielli di Crestvolant <vittorio.tornielli@gmail.com>
+.SH COPYRIGHT
+Copyright Vittorio Tornielli di Crestvolant 2009-2014. This software is provided under the terms of the GPLv3 license, for more information see
+.I http://www.gnu.org/licenses/
