@@ -169,8 +169,8 @@ int Crw::readBuffer(void* buffer, int samples, int size)
     switch(INstate) {
       case 1:	b = static_cast<char*>(buffer);
 		fd.read(b, samples*size);
-		if(fd.good()) samples_read = fd.gcount()/size;
-		else samples_read = -1;
+		samples_read = fd.gcount()/size;
+		if(samples_read == 0) samples_read = -1;
 		break;
       case 2:	if(pa_simple_read(sound_stream, buffer, samples*size, &sound_error) >= 0)
 		  samples_read = samples;
