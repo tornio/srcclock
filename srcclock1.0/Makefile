@@ -9,7 +9,7 @@ LIBS = -lpulse-simple -lpulse
 CFLAGS = -Wall -c $(DEBUG) $(LIBS) -std=c++11
 LFLAGS = -Wall $(DEBUG) $(LIBS)
 
-SRCclock: $(OBJS)
+srcclock: $(OBJS)
 	$(CC) $(OBJS) $(LFLAGS) -o srcclock
 
 main.o: main.cpp csrc.h crw.h clog.h

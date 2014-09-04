@@ -65,7 +65,7 @@ void print_help(const char* filename)
 	<<"\nOption list:\n"
 	<<"  -d, --decode\t\tdecode SRC signal\n"
 	<<"  -y, --system-sync\tSyncronise the system clock to the SRC. Requires\n\t\t\tsuperuser privileges.\n"
-	<<"  -N, --snr=SNR_LEVEL\tSNR detection level over the noise in dB.\n\t\t\tDefault is SNR_LEVEL=10 dB abose noise level\n"
+	<<"  -N, --snr=SNR_LEVEL\tSNR detection level over the noise in dB.\n\t\t\tDefault is SNR_LEVEL=5 dB abose noise level\n"
 	<<"  -W, --window=LENGTH\tWindow Decision System. Set the length of the window\n\t\t\tin time symbols. Default is LENGTH=50 symbols\n"
 	<<"  -D, --delay=DELAY\tdelay of syncronisation in microseconds\n"
 	<<"  -T, --timeout=TIMEOUT\tset the timeout for decoding in seconds\n"
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
   options.noise = 0.0;
   options.timeout = 0;		// uses default
   options.wds = 50;
-  options.snr_level = 10.0;	// 10 dB SNR default
+  options.snr_level = 5.0;	// 5 dB SNR default
   
   options.fo = '\0';
   options.soundDev = '\0';	// default sound device
